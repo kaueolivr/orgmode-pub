@@ -1,0 +1,5 @@
+#+title: README
+#+author: Kauê Patrick de Oliveira
+
+# Org-Mode para criação de slides didáticos
+Projeto da vertente de ensino, com bolsa fornecida pelo Programa Unificado de Bolsas da Universidade de São Paulo.
