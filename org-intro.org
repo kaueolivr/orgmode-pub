@@ -1,0 +1,12 @@
+#+title: Introdução ao Org-Mode
+#+author: Kauê Patrick de Oliveira
+
+* Estrutura do documento
+** Títulos
+Os títulos são criados adicionando o caractere * (asterisco) antes do texto. É possível adicionar mais astericos para criar mais níveis na estrutura hierárquica
+** Visualização da estrutura
+O org oferece uma maneira de visualizar a estrutura hierárquica do documento, ocultando e exibindo conteúdo conforme desejado.
+
+Pressionar a tecla TAB com o cursor sobre um título altera a visibilidade do subnível correspondendo ao título, seguindo a ordem Oculto -> Filhos -> Mostrar Tudo.
+
+Para alterar a visibilidade do documento como um todo, utiliza-se o comando S-TAB (pressiona-se a tecla Shift e, em seguida, Tab), que segue a ordem Visão Geral -> Conteúdo -> Mostrar Tudo.
