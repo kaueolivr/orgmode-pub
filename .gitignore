@@ -1,3 +1,15 @@
 *.pdf
 *.tex
+*.vrb
+*.aux
+*.log
+*.out
+*.pyg
 _minted-org-beamer/
+orgweb-pt-br/resources/fonts
+orgweb-pt-br/resources/img
+orgweb-pt-br/resources/js
+orgweb-pt-br/resources/normal-outline-3.html
+orgweb-pt-br/resources/oembed-info.json
+orgweb-pt-br/resources/style
+slides-coo/_minted-slides
