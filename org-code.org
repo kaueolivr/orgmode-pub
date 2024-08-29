@@ -1,0 +1,371 @@
+#+TITLE: Programação no Org-Mode
+#+AUTHOR: Kauê Patrick de Oliveira
+
+* Source Code
+O código-fonte do Org-mode se refere a qualquer conjunto de instruções para o computador, utilizando uma linguagem de programação, escritas em texto puro. O Org lida com código-fonte identificado com marcadores de início e de fim.
+Dessa forma, o código-fonte é estruturado nos chamados blocos de código-fonte. Esses blocos podem estar em quase qualquer local do arquivo, exceto dentro de comentários ou seções com largura fixa. Os marcadores de início e de fim desses blocos são, respectivamente, "#+BEGIN_SRC" e "#+END_SRC".
+
+** Visão geral
+O Org-mode oferece diversos recursos relacionados aos blocos de código, entre eles:
+- Editar/formatar
+  - O Org usa um modo principal do Emacs adequado de acordo com a linguagem de programação do bloco, facilitando a edição e formatação
+- Extrair
+  - É possível extrair o conteúdo de blocos de código para código-fonte (arquivos de determinada linguagem de programação), processo conhecido como /tangling/ na programação literária
+- Exportar/publicar
+  - Os /back-ends/ do Org permitem formatar adequadamente um bloco para exportação e/ou publicação
+- Executar/compilar
+  - O usuário pode escolher o compilador utilizado pelo Org para executar blocos de diferentes linguagens
+  - A saída pode ser um link para diversos tipos de mídia ou para uma mensagem de erro do compilador
+- Armazenar os resultados
+  - Os resultados dos blocos de código podem ser inseridos no próprio documento Org ou exportados
+  - Valores de saída, funções e variáveis também podem ser passadas para outros blocos, mesmo de linguagens diferentes
+    
+Os blocos de código podem alterar o conteúdo do documento Org ou do arquivo a ser exportado. Além disso, os usuários podem ajustar o funcionamento desses blocos ajustando argumentos dos cabeçalhos (/headers/).
+Através do uso de blocos de código, um único documento Org pode manter texto, dados, código, resultados de execução, links e outras informações valiosas.
+
+#+begin_comment
+Bloco de código:
+#+NAME: <name>
+#+BEGIN_SRC <language> <switches> <header arguments>
+  <body>
+#+END_SRC
+
+Inserir bloco de código: C-c c-, s
+
+Bloco inline:
+src_<language>{<body>} ou src_<language>[<header arguments>]{<body>}
+#+end_comment
+
+** Argumentos de /Header/
+O Org-mode possui argumentos de cabeçalho comuns a todas as linguagens e alguns argumentos específicos para algumas linguagens. Um argumento se inicia com um dois-pontos seguido pelo nome do argumento em /lowercase/. Os argumentos podem ser definidos de diferentes maneiras, portanto, em caso de sobreescrita, o Org prioriza o valor local
+*** Valores padrão
+Os valores padrão para os argumentos estão definidos nas variáveis org-babel-default-header-args (para blocos de código) e org-babel-default-inline-header-args (para blocos /inline/).
+A única diferença entre os valores padrão dos blocos normais e /inline/ é o valor da variável /exports/ (/code/ e /results/, respectivamente).
+Valores de argumentos definidos utilizando as propriedades Org se aplicam para ambos os tipos de bloco.
+Cada linguagem pode possuir diferentes valores padrão.
+*** Argumentos nas propriedades Org-mode
+Utilizando a palavra "#+PROPERTY" ou o conjunto de texto definido por ":PROPERTIES:" é possível definir argumentos válidos para diferentes blocos, dependendendo de onde a propriedade é definida.
+Os argumentos são definidos para a sub-árvore na qual as propriedades estão localizadas. Para definir os valores, Org utiliza a chamada mais externa (árvore de maior nível).
+Também é possível definir argumentos específicos para cada linguagem, utilizando "header-args:<language>" nas propriedades.
+*** Argumentos específicos dos blocos
+Os argumentos definidos nos blocos são priorizados ao invés dos valores padrão ou dos definidos nas propriedades
+*** Argumentos nas chamadas de funções
+Os argumentos definidos nas chamadas de funções (através de "#+CALL" são os casos mais específicos e possuem prioridade sobre os argumentos definidos em qualquer outro nível.
+
+** Ambiente do bloco
+*** Passando argumentos
+Utiliza-se a sintaxe ":var NAME=ASSIGN" para passar argumentos para um bloco de código, que podem ser uma /string/, um número, uma referência para uma tabela Org, uma lista, um exemplo literal, outro bloco de códigos, o resultado de outro bloco, entre outros.
+É possível até mesmo utilizar valores de outros arquivos como argumentos, através da sintaxe ":var NAME=FILE:REFERENCE".
+
+**** Tabela
+É possível passar tabelas Org como argumento para um código de blocos
+
+*Exemplo 1*
+Este código recebe uma tabela Org como argumento e sua saída é o tamanho da tabela
+#+NAME: example-table
+| 1 |
+| 2 |
+| 3 |
+| 4 |
+| 5 |
+
+#+NAME: table-length
+#+BEGIN_SRC emacs-lisp :var table=example-table
+  (length table)
+#+END_SRC
+
+#+RESULTS: table-length
+: 5
+
+O argumento de cabeçalho "colnames" aceita os valores "yes", "no" e "nil" e define como o código lida com os nomes de colunas.
+O valor padrão é "nil" e define que o bloco receba a tabela, remova os nomes das colunas (caso existam), processe a tabela e, por fim, coloque de volta os nomes das colunas na tabela.
+Com o valor "yes", o comportamento é semelhante, exceto que a primeira linha é eliminada, independente de ela conter os nomes das colunas ou não.
+Se o valor é "no", o bloco não processa ou imprime a primeira linha de nenhuma forma.
+
+*Exemplo 2*
+Utilizando o valor "nil", o bloco não processa a primeira linha (nome da coluna), mas a imprime no final.
+#+NAME: less-cols
+| a |
+| b |
+| c |
+
+#+BEGIN_SRC python :var tab=less-cols :colnames nil
+  return [[val + '*' for val in row] for row in tab]
+#+END_SRC
+
+#+RESULTS:
+| a  |
+|----|
+| b* |
+| c* |
+
+Um comportamento semelhante ocorre com o argumento "rownames", que define como os blocos lidam com as linhas. A única diferença é que não existe o valor "nil", pois não há a diferenciação de nomes de linhas utilizando linhas, como "|-----|" para as colunas.
+
+*Exemplo 3*
+Através do valor "yes", o Org processa a tabela inteira, exceto pela primeira célula de cada linha.
+#+NAME: with-rownames
+| one | 1 | 2 | 3 | 4 |  5 |
+| two | 6 | 7 | 8 | 9 | 10 |
+
+#+BEGIN_SRC python :var tab=with-rownames :rownames yes
+  return [[val + 10 for val in row] for row in tab]
+#+END_SRC
+
+#+RESULTS:
+| one | 11 | 12 | 13 | 14 | 15 |
+| two | 16 | 17 | 18 | 19 | 20 |
+
+Utilizando a sintaxe ":var table=other-file.org:example-table", é possível receber tabelas Org de outro arquivo como argumento.
+
+**** Listas
+É possível também utilizar listas Org como argumento de blocos de código. Porém, itens aninhados da lista (sub-tópicos) são ignorados
+
+*Exemplo 4*
+Recebe uma lista e imprime seus itens
+#+NAME: example-list
+- simple
+  - not
+  - nested
+- list
+
+#+BEGIN_SRC emacs-lisp :var x=example-list
+  (print x)
+#+END_SRC
+
+#+RESULTS:
+| simple | list |
+
+**** Blocos de código sem argumentos
+A saída de um bloco também pode ser utilizada como argumento para outro bloco.
+
+*Exemplo 5*
+Utiliza a saída do bloco ~table-length~ anteriormente definido (que calcula o tamanho de uma tabela) como argumento
+#+BEGIN_SRC emacs-lisp :var length=table-length()
+  (* 2 length)
+#+END_SRC
+
+#+RESULTS:
+: 10
+
+**** Blocos de código com argumentos
+É possível utilizar como argumento a saída de blocos de código que também possuem seus próprios argumentos
+
+*Exemplo 6*
+O bloco ~double~, com argumento ~input=1~, é utilizado como argumento de ~squared~
+#+NAME: double
+#+BEGIN_SRC emacs-lisp :var input=8
+  (* 2 input)
+#+END_SRC
+
+#+RESULTS: double
+: 16
+
+#+NAME: squared
+#+BEGIN_SRC emacs-lisp :var input=double(input=3)
+  (* input input)
+#+END_SRC
+
+#+RESULTS: squared
+: 36
+
+**** Exemplos literais/Conteúdos de blocos de códig
+Um código ou exemplo de literal pode ser utilizado como argumento através da palavra "NAME", seguida por colchetes (opcional para blocos de exemplo)
+*Exemplo 7*
+#+NAME: literal-example
+#+BEGIN_EXAMPLE
+  A literal example
+  on two lines
+#+END_EXAMPLE
+
+#+NAME: read-literal-example
+#+BEGIN_SRC emacs-lisp :var x=literal-example[]
+  (concatenate #'string x " for you.")
+#+END_SRC
+
+#+RESULTS: read-literal-example
+: A literal example
+: on two lines for you.
+
+No caso de variáveis como tabelas, utilizando os colchetes e um índice também é possível referenciar apenas uma parte da variável. Os índices se iniciam em 0 e valores negativos fazem a leitura do fim para trás. Utilizando vírgula e outro(s) indíce(s), é possível referenciar outras dimensões da variável. Porém, os indíces não removem os nomes das linhas e das colunas (mesmo quando se utiliza os argumentos "colnames" e "rownames")
+*Exemplo 7*
+O seguinte exemplo faz a leitura do valor na primeira linha (indíce 0) e na última coluna (indíce -1) da tabela
+#+NAME: example-table
+| 1 | a |
+| 2 | b |
+| 3 | c |
+| 4 | d |
+
+#+BEGIN_SRC emacs-lisp :var data=example-table[0,-1]
+  data
+#+END_SRC
+
+#+RESULTS:
+: a
+
+Utilizando um sinal de dois-pontos entre dois inteiros em um indíce, é possível referenciar uma sequência de valores da variável
+*Exemplo 8*
+Este código faz a leitura da segunda (indíce 1) à quarta (indíce 3) linha da tabela.
+#+NAME: example-table
+| 1 | a |
+| 2 | b |
+| 3 | c |
+| 4 | d |
+| 5 | 3 |
+
+#+BEGIN_SRC emacs-lisp :var data=example-table[1:3]
+  data
+#+END_SRC
+
+#+RESULTS:
+| 2 | b |
+| 3 | c |
+| 4 | d |
+
+Para escolher o conjunto inteiro de dados, basta deixar o indíce vazio ou utilizar "*" ou "0:-1"
+*Exemplo 9*
+Imprime a primeira coluna da tabela
+#+NAME: example-table
+| 1 | a |
+| 2 | b |
+| 3 | c |
+| 4 | d |
+
+#+BEGIN_SRC emacs-lisp :var data=example-table[,0]
+  data
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 | 3 | 4 |
+
+*Exemplo 10*
+Leitura por indíce de dados em três dimensões
+#+NAME: 3D
+#+BEGIN_SRC emacs-lisp
+  '(((1  2  3)  (4  5  6)  (7  8  9))
+    ((10 11 12) (13 14 15) (16 17 18))
+    ((19 20 21) (22 23 24) (25 26 27)))
+#+END_SRC
+
+#+RESULTS: 3D
+| (1 2 3)    | (4 5 6)    | (7 8 9)    |
+| (10 11 12) | (13 14 15) | (16 17 18) |
+| (19 20 21) | (22 23 24) | (25 26 27) |
+
+#+BEGIN_SRC emacs-lisp :var data=3D[1,,1]
+  data
+#+END_SRC
+
+#+RESULTS:
+| 11 | 14 | 17 |
+
+*** Utilizando sessões
+Múltiplos blocos de código podem ser executados no mesmo ambiente (sessão), através do argumento "header". Códigos com o mesmo nome de sessão são executados no mesmo processo do interpretador
+
+**** 'none'
+Valor padrão. Cada bloco de código é executado em um novo processo do interpretador, que termina assim que o bloco é avaliado
+
+**** STRING
+Definindo uma string no lugar de 'none', uma sessão com o nome dessa string é definida.
+
+*** Escolhendo um diretório de trabalho
+Através do argumento 'dir', é possível especificar o diretório em que a saída do código é salva, que pode ser até mesmo uma máquina remota (utilizando a sintaxe Tramp)
+
+*** Headers e footers
+Os argumentos 'prologue' e 'epilogue' permitem adicionar conteúdo (como uma instrução de 'reset') ao começo ou ao fim do bloco, respectivamente
+
+** Avaliação do bloco
+Para aumentar a segurança, é necessário permissão do usuário antes de executar cada bloco de código
+O resultado do código é inserido logo após o bloco, pulando uma linha e precedido pela palavra "RESULTS"
+
+Org pode chamar códigos nomeados do buffer atual ou da Biblioteca de Babel utilizando a palavra chave CALL.
+
+Utilizando o argumento de cabeçalho "cache", é possível armazenar em cache os resultados de blocos, caso o código e seus argumentos não tenham sido alterados, evitando novas execuções
+Porém, em alguns casos o resultado armazenado em cache pode não ser confiável e, se usado em sessões, pode provocar resultados inesperados.
+
+** Resultados da avaliação
+A maneira como o Org lida com os resultados da execução de código depende dos valores de vários argumentos, em especial 'results'
+
+*** results
+Possui quatro classes de opções e cada bloco pode ter uma opção de cada classe
+**** Collection
+Define como os resultados são coletados
+*value:* O valor de retorno é o resultado
+*output:* A saída textual é o resultado
+**** Type
+Define o tipo esperado do resultado. O padrão é determinar o tipo automaticamente
+*table/vector:* Interpreta o resultado como uma tabela Org
+*list:* O resultado é lido como uma lista Org
+*scalar/verbatim:* O tipo esperado do resultado é texto
+*file:* Escreve o resultado em um arquivo, seguindo especificações de nome e diretório, e insere o link para o arquivo
+**** Format
+Relacionado à forma como o Org processa o resultado
+*code:* Insere o resultado em um bloco de código
+*drawer:* Insere o resultado em um bloco 'RESULTS'
+*html:* Exporta o resultado como html
+*latex:* Exporta o resultado como latex
+*link:* Armazena em um arquivo, podendo inclusive ser uma imagem (argumento *'graphics'*)
+*org:* O resultado é anexado em um bloco BEIGIN_SRC
+*pp:* Converte o resultado em um código-fonte agradável para impressão
+*raw:* Intrerpretra como Org puro, inserido diretamente no buffer
+**** Handling
+Define a forma que o resultado é inserido após a formatação
+*replace:* Padrão. Insere no buffer, atualizando resultados anteriores
+*silent:* Não insere no buffer, apenas no minibuffer
+*none:* Executa o código mas não insere o resultado em nenhum lugar, podendo ser referenciado por outro código
+*discard:* Ignora completamente o resultado, sem processamento
+*append:* Adiciona o resultado ao buffer, abaixo de resultados anteriores
+*prepend:* Adiciona o resultado ao buffer, acima de resultados anteriores
+
+*** post
+Esse argumento define o pós-processamento para um código
+
+** Exportação
+O argumento 'exports' define a parte do código a ser exportada para formatos como HTML e LaTeX
+*code:* Padrão. O conteúdo do código é exportado
+*results:* Os resultados do código são incluídos no arquivo de exportação
+*both:* O código e os resultados são exportados
+*none:* Nem o código nem os resultados são exportados
+
+** Extração
+Extrair código é uma parte importante da programação literária e o org tem diversos recursos relacionados a isso
+O comando de 'tangle' é C-c C-v t
+*** Tangle
+O argumento 'tangle' define se o bloco de código é exportado para um arquivo separado de sua linguagem
+*** FILENAME
+Especifica o nome do arquivo de exportação, também é possível configurar diretórios e comentários
+
+*** Exemplo de extração (salva o código em um arquivo)
+#+begin_src C :tangle hello.c
+  #include <stdio.h>
+  int main() {
+    printf("Hello World!\n");
+    return 0;
+  }
+#+end_src
+
+#+RESULTS:
+: Hello World!
+
+** Noweb
+Blocos de código podem incluir referências para outros blocos, utilizando a sintaxe de estilo noweb
+
+*Exemplo*
+O segundo bloco inclui o primeiro bloco
+#+NAME: initialization
+#+BEGIN_SRC emacs-lisp
+  (setq sentence "Never a foot too far, even.")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :noweb yes
+  <<initialization>>
+  (reverse sentence)
+#+END_SRC
+
+#+RESULTS:
+: .neve ,raf oot toof a reveN
+
+** Biblioteca de Babel
+É uma coleção de blocos de código que atua como uma biblioteca de funções que podem ser chamadas em outros arquivos Org
+
+** Execução no Batch
+Os recursos do Org também podem ser executados na linha de comando

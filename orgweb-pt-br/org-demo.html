@@ -1,0 +1,133 @@
+<div id="org-demo" style="counter-set: chk 0">
+  <asside class="label-left">Metadados</asside>
+  <pre class="label-left">
+#+title:  <span class="org-document-title">Exemplo de arquivo Org</span>
+#+author: <span class="org-document-info">TEC</span>
+#+date:   <span class="org-document-info">2020-10-27</span></pre>
+  <details open>
+    <summary>
+      <asside class="right" style="position: relative; z-index: -1">
+	    <h4>Outlining</h4> <!-- TODO: I don't know if this is the best way to phrase it -->
+        Os cabeçalhos e as "dobras" facilitam a edição da estrutura. Texto simples deixa fácil sincronizar e realizar o controle de versionamento dos arquivos Org.
+      </asside>
+      <pre><span class="org-level-1">* Renovem o website orgmode.org</span></pre>
+    </summary>
+    <asside class="left">
+      <h4>Agenda</h4>
+      Crie listas de tarefas em todos os seus arquivos. Filtre e atualize diretamente o conteúdo.</asside>
+    </asside>
+    <pre>
+
+A <i>/beleza/</i> do org <b>*deve*</b> ser compartilhada.</pre>
+    <details class="replace">
+      <summary>
+	<pre><span class="org-link">[[https://upload.wikimedia.org/wikipedia/commons/b/bd/Share_Icon.svg]]</span></pre>
+      </summary>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Share_Icon.svg" alt="share icon" style="height: 3em; margin-left: 1.5em"/>
+    </details>
+    <details open class="br">
+      <summary>
+	<pre><span class="org-level-2">** <span class="org-done">DONE Tirar prints das telas</span></span></pre>
+      </summary>
+      <pre>   <span class="org-special-keyword">CLOSED:</span> <span class="org-date">[2020-09-03 Thu 18:24]</span>
+
+</pre>
+    </details>
+    <details open>
+      <summary>
+	<pre><span class="org-level-2">** <span class="org-done">DONE Refazer o CSS do site</span></span></pre>
+      </summary>
+      <pre>
+
+Vá para <span class="org-link"><a href="/resources/style/org.css">[[file:style.scss][stylesheet]]</a></span>
+
+</pre>
+    </details>
+    <input type="checkbox" class="chk" id="chk1" checked />
+    <input type="checkbox" class="chk" id="chk2" checked />
+    <input type="checkbox" class="chk extra" id="chk3" />
+    <input type="checkbox" class="chk" id="chk4" />
+    <input type="checkbox" class="chk" id="chk5" checked />
+    <input type="checkbox" class="chk extra" id="chk6" />
+    <input type="checkbox" class="chk" id="chk7" />
+    <details>
+      <summary>
+	<pre><span class="org-level-2">** <span class="org-todo">TODO</span> Verificar o CSS nas principais páginas <span class="count-res"></span></span></pre>
+      </summary>
+      <pre class="countme">
+
+<label for="chk1"><span class="org-list-dt">-</span> Página index</label>
+<label for="chk2"><span class="org-list-dt">-</span> Início rápido</label>
+<label for="chk3"><span class="org-list-dt">-</span> Recursos</label>
+<label for="chk4"><span class="org-list-dt">-</span> Lançamentos</label>
+<label for="chk5"><span class="org-list-dt">-</span> Instalação</label>
+<label for="chk6"><span class="org-list-dt">-</span> Manual</label>
+<label for="chk7"><span class="org-list-dt">-</span> Contribuir</label>
+</pre>
+    </details>
+  </details>
+  <details open class="label-left">
+    <summary>
+      <asside class="label-left">Texto</asside>
+      <pre><span class="org-level-1">* Aprender Org</span></pre>
+    </summary>
+    <pre>
+
+Org faz as coisas fáceis serem triviais e as coisas difíceis, práticas.
+
+Você não precisa aprender Org antes de começar a usar Org: leia a
+página do início rápido e você deve estar pronto para continuar.
+Se você precisar de mais, Org vai estar aqui para você:
+mergulhe no manual e se junte à comunidade!
+
+    </pre>
+    </pre>
+    </pre>
+    <details open>
+      <summary>
+	<pre><span class="org-level-2">** Feedback</span></pre>
+      </summary>
+      <pre>
+
+<span class="org-special-keyword">#+include: "other/feedback.org*manual" :only-contents t</span></pre>
+    </details>
+  </details>
+  <details open>
+    <summary>
+      <pre>
+<span class="org-level-1">* Verificar a taxa de minificação do CSS</span>
+      </pre>
+    </summary>
+    <asside class="right">
+      <h4>Babel</h4>
+      Faça programação literária no Org, com execução de código ao vivo, semelhante a um notebook, no buffer.
+    </asside>
+    <asside class="label-left">Código</asside>
+    <details open>
+      <summary><pre class="label-left" style="background-color: #ccc4"><span class="org-block-begin-line">#+begin_src python</span></pre></summary>
+      <pre class="src label-left" style="background-color: #fff4">
+<span class="org-keyword">from</span> pathlib <span class="org-keyword">import</span> Path
+<span class="org-variable-name">cssRatios</span> = []
+<span class="org-keyword">for</span> css_min <span class="org-keyword">in</span> Path(<span class="org-string">"resources/style"</span>).glob(<span class="org-string">"*.min.css"</span>):
+    <span class="org-variable-name">css</span> = css_min.with_suffix(<span class="org-string">''</span>).with_suffix(<span class="org-string">'.css'</span>)
+    cssRatios.append([css.name,
+    <span class="org-string">"{:.0f}% minificado ({:4.1f} KiB)"</span>.<span class="org-builtin">format</span>( <b>100</b> *
+                      css_min.stat().st_size / css.stat().st_size,
+                      css_min.stat().st_size / <b>1000</b>)])
+<span class="org-keyword">return</span> cssRatios
+</pre>
+      <pre class="label-left" style="background-color: #ccc4"><span class="org-block-end-line">#+end_src</span></pre>
+    </details>
+    <details open>
+      <summary>
+	<asside class="label-left">Resultados</asside>
+	<pre class="label-left br"><span class="org-block-begin-line">#+RESULTS:</span></pre>
+      </summary>
+      <pre class="label-left"><span class="org-table">| index.css    | 76% minificado ( 1.4 KiB) |
+| org-demo.css | 77% minificado ( 2.8 KiB) |
+| errors.css   | 74% minificado ( 4.9 KiB) |
+| org.css      | 75% minificado (10.7 KiB) |
+</span></pre>
+    </details>
+  </details>
+</div>

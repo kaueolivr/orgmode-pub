@@ -1,0 +1,735 @@
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [Ligatures=TeX,table,brazil,svgnames,usetotalslideindicator,compress,10pt,aspectratio=43]
+
+#+LATEX_COMPILER: lualatex
+
+#+startup: beamer
+
+#+OPTIONS: H:1 toc:nil
+
+#+BEAMER_THEME: metropolis [titleformat=allsmallcaps]
+
+#+BEAMER_HEADER: \usepackage{polyglossia, graphicx, alltt, multirow, minted, attachfile, luatex85}
+# Necessário usar o pacote luatex85 por questões de compatibilidade com o attachfile
+
+#+BEAMER_HEADER: \setdefaultlanguage{brazil}
+
+# Cria um novo ambiente para inserção de código que insere o comando scriptsize
+#+BEAMER:\newenvironment<>{mycode}{\scriptsize}{}
+
+#+TITLE: Conceitos básicos de Orientação a Objetos
+#+SUBTITLE: ACH 2003 --- Computação Orientada a Objetos
+#+AUTHOR: Daniel Cordeiro
+#+LATEX_HEADER: \institute{Escola de Artes, Ciências e Humanidades | EACH | USP}
+#+DATE:
+
+* Voltemos a Java
+Quais são os conceitos básicos de OO que vocês já viram?
+@@beamer:\pause@@
+- Objeto
+- Classe
+- Herança
+- Interface
+- Pacote
+** Programação Orientada a Objetos :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+É um estilo de programação centrado no uso de /objetos/ para o projeto e construção de aplicações.
+
+* O que é um Objeto?
+#+BEGIN_QUOTE
+    OOP to me means only messaging, local retention and protection and
+    hiding of state-process, and extreme late-binding of all
+    things. It can be done in Smalltalk and in LISP. There are
+    possibly other systems in which this is possible, but I'm not
+    aware of them. @@beamer:\hfill@@ --- Dr. Alan Kay
+#+END_QUOTE
+@@beamer:\pause@@
+** Definição (apesar de não existir consenso) :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+Objeto é um componente de software que contém propriedades
+(estado) e os métodos (comportamento) necessários para tornar um
+tipo de dado útil.
+* Objeto
+- Dados + Métodos
+- Os métodos modificam o estado interno do objeto e servem como mecanismo primário para comunicação entre objetos
+** Encapsulamento (de dados) :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+Mecanismo de linguagens de programação para restringir o acesso ao
+estado interno de um objeto, fazendo com que toda interação com
+ele seja realizada através de seus métodos.
+* Objeto
+** Benefícios :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+- Modularidade: :: o código fonte de um objeto pode ser escrito e mantido independentemente do código de outros objetos
+- Encapsulamento: :: ao interagir com objetos pelos seus métodos, os detalhes de sua implementação interna se mantêm ocultos para o mundo externo
+- Reutilização: :: se um objeto já foi definido, você pode usá-lo no seu programa
+- /Pluggability/ e facilidade de depuração: :: se um objeto em particular se mostrar problemático, você pode removê-lo e plugar um outro em seu lugar
+* O que é uma classe?
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+** Classe :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+é o modelo (ou protótipo) a partir do qual objetos individuais serão criados. Uma @@beamer:\alert{instância}@@ é um objeto construído a partir de uma classe.
+*** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.7
+:END:
+#+BEAMER:\scriptsize
+# O argumento tangle exporta o código para outro arquivo, enquanto o argumento mkdirp cria o diretório pai presente no nome do arquivo (neste caso, o diretório "codigos")
+# Comando para exportar os códigos: C-c C-v t
+#+BEGIN_SRC java :tangle codigos/Bicicleta.java :mkdirp yes
+  class Bicicleta {
+    int cadência = 0;
+    int velocidade = 0;
+    int marcha = 1;
+
+    void mudarCadência(int novoValor) {
+         cadência = novoValor;
+    }
+    void mudarMarcha(int novoValor) {
+         marcha = novoValor;
+    }
+    void acelerar(int incremento) {
+         velocidade = velocidade + incremento;
+    }
+    void frear(int decremento) {
+         velocidade = velocidade - decremento;
+    }
+}
+#+END_SRC
+*** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.3
+:END:
+#+BEAMER:\begin{flushright} \resizebox{!}{0.2cm}{\attachfile[color=0 0 0]{codigos/Bicicleta.java}{\resizebox{!}{0.4cm}{ Download}}} \end{flushright}
+* O que é Herança?
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+** Definição :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+É a capacidade de linguagens orientadas a objetos de permitir que classes @@beamer:\alert{herdem}@@ estados e comportamentos comuns a outras classes.
+#+BEAMER:\small
+#+BEGIN_SRC java
+class MountainBike extends Bicicleta {
+    // novos campos e métodos que definem
+    // uma mountain bike
+}
+#+END_SRC
+#+BEAMER:\normalsize \texttt{MountainBike} é uma \alert{subclasse} de \texttt{Bicicleta}.\\ \texttt{Bicicleta} é a \alert{superclasse} de \texttt{MountainBike}.
+* O que é uma Interface?
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+** Definição :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+Interface é um conjunto de métodos que os objetos expõem para o mundo externo.
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java
+interface Bicicleta {
+
+    // número de rotações da roda por minuto
+    void mudarCadência(int novoValor);
+
+    void mudarMarcha(int novoValor);
+
+    void acelerar(int incremento);
+}
+
+
+
+class BicicletaBásica implements Bicicleta {
+    ...
+}
+#+END_SRC
+* o que é um Pacote?
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+** Definição :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+Um pacote é um espaço de nomes que organiza um conjunto de classes e interfaces relacionadas.
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java
+package bicicleta;
+
+interface Bicicleta { ... }
+
+class BicicletaBásica implements Bicicleta { ... }
+
+class MountainBike extends BicicletaBásica { ... }
+#+END_SRC
+#+BEAMER:\normalsize
+** Fully qualified name de uma classe :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+#+BEAMER:\mintinline{java}{bicicleta.MountainBike}
+* Variáveis
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+#+BEGIN_SRC java :tangle codigos/variaveis.java :mkdirp yes
+    int cadência = 0;
+    int velocidade = 0;
+    int marcha = 1;
+#+END_SRC
+A linguagem Java define os seguintes tipos de variáveis:
+- Variáveis de classe: :: (campos estáticos), definidos com o modificador @@beamer:\texttt{static}@@, que indica para o compilador que existe apenas uma cópia dessa variável, independentemente do número de vezes que a classe foi instanciada
+- Variáveis de Instância: :: (campos que não são estáticos) seus valores são únicos para cada instância de uma classe
+- Variáveis locais: :: variáveis temporárias que só existem no escopo de um método
+- Parâmetros: :: variáveis que armazenam os valores (objetos) passados na chamada a um método
+* Tipos primitivos de dados
+- byte :: 8-bits @@beamer:$[-128; 127]$@@
+- short :: 16-bits @@beamer:$[-32.768; 32.767]$@@
+- int  :: 32-bits @@beamer:$[-2^{31}; 2^{31}-1]$@@
+- long :: 64-bits @@beamer:$[-2^{63}; 2^{63}-1]$@@
+- float :: ponto flutuante de precisão simples de 32-bits
+- double ::  ponto flutuante de precisão dupla de 64-bits
+- boolean :: ~true~ ou ~false~
+- char ::  1 caractere Unicode de 16-bits
+Além de suporte especial para cadeias de caracteres. Ex: @@beamer:\texttt{"isso é uma String"}@@ (java.lang.String)
+* Operadores
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+#+BEAMER:\footnotesize
+#+ATTR_LATEX: :align |l|l|
+#+CAPTION: Operadores e suas precedências. Quanto mais no topo da tabela, maior a precedência do operador.
+|------------------------------+---------------------------------------------------|
+| @@beamer:\textbf{Operador}@@ | @@beamer:\textbf{Precedência}@@                   |
+|------------------------------+---------------------------------------------------|
+|------------------------------+---------------------------------------------------|
+| postfix                      | ~expr++ expr--~                                   |
+|------------------------------+---------------------------------------------------|
+| unary                        | ~++expr --expr +expr -expr ~ !~                   |
+|------------------------------+---------------------------------------------------|
+| multiplicative               | ~* / %~                                           |
+|------------------------------+---------------------------------------------------|
+| additive                     | ~+ -~                                             |
+|------------------------------+---------------------------------------------------|
+| shift                        | ~<< >> >>>~                                       |
+|------------------------------+---------------------------------------------------|
+| relational                   | ~< > <= >=~ instanceof                            |
+|------------------------------+---------------------------------------------------|
+| equality                     | ~== !=~                                           |
+|------------------------------+---------------------------------------------------|
+| bitwise AND                  | ~&~                                               |
+|------------------------------+---------------------------------------------------|
+| bitwise exclusive OR         | ~^~                                               |
+|------------------------------+---------------------------------------------------|
+| bitwise inclusive OR         | \vert                                             |
+|------------------------------+---------------------------------------------------|
+| logical AND                  | ~&&~                                              |
+|------------------------------+---------------------------------------------------|
+| logical OR                   | \vert \vert                                       |
+|------------------------------+---------------------------------------------------|
+| ternary                      | ~? :~                                             |
+|------------------------------+---------------------------------------------------|
+| assignment                   | ~= += -= *= /= \%= \&= ^=~ \vert ~= <<= >>= >>>=~ |
+|------------------------------+---------------------------------------------------|
+* Expressões para o controle de fluxo
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+** if--then--else :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java :tangle codigos/if-else.java :mkdirp yes
+void brecar() {
+    if (estáEmMovimento) {
+        velocidadeAtual--;
+    } else {
+        System.err.println("A bicicleta já está parada!");
+    }
+}
+#+END_SRC
+* Expressões para o controle de fluxo
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+** switch :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java :tangle codigos/switch.java :mkdirp yes
+    public static int getMonthNumber(String month) {
+        int monthNumber = 0;
+
+        if (month == null) {
+            return monthNumber;
+        }
+
+        switch (month.toLowerCase()) {
+            case "january":
+                monthNumber = 1;
+                break;
+
+            /*          ...         */
+
+            case "december":
+                monthNumber = 12;
+                break;
+            default:
+                monthNumber = 0;
+                break;
+        }
+        return monthNumber;
+    }
+#+END_SRC
+* while e do--while
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+#+BEAMER:\scriptsize
+# Para as colunas, necessário trocar \columnwidth por \textwidth
+** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.5
+:END:
+#+BEGIN_SRC java :tangle codigos/while.java :mkdirp yes
+class WhileDemo {
+    public static void main(
+                       String[] args){
+
+        int count = 1;
+        while (count < 11) {
+            System.out.println(
+              "Count is: " + count);
+            count++;
+        }
+    }
+}
+#+END_SRC
+
+# Falta adicionar a linha separando as colunas
+# #+BEAMER: \qquad \vrule \qquad
+
+** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.5
+:END:
+#+BEGIN_SRC java :tangle codigos/do-while.java :mkdirp yes
+class DoWhileDemo {
+    public static void main(
+                       String[] args){
+
+        int count = 1;
+        do {
+            System.out.println(
+              "Count is: " + count);
+            count++;
+        } while (count < 11);
+    }
+}
+#+END_SRC
+* for
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+#+BEAMER:\scriptsize
+** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.5
+:END:
+#+BEGIN_SRC java :tangle codigos/for.java :mkdirp yes
+class ForDemo {
+  public static void main(String[] args){
+    for(int i=1; i<11; i++){
+      System.out.println(
+                 "Count is: " + i);
+    }
+  }
+}
+#+END_SRC
+
+# Falta adicionar a linha separando as colunas
+# #+BEAMER: \qquad \vrule \qquad
+
+** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.5
+:END:
+#+BEGIN_SRC java :tangle codigos/enhanced-for.java :mkdirp yes
+class EnhancedForDemo {
+  public static void main(
+                     String[] args){
+    int[] numbers =
+          {1,2,3,4,5,6,7,8,9,10};
+    for (int item : numbers) {
+      System.out.println(
+                 "Count is: " + item);
+    }
+  }
+}
+#+END_SRC
+* Declaração de Classes
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java
+class MinhaClasse extends MinhaSuperClasse implements SuaInterface {
+
+  // campos
+  int meuInteiro;
+  double meuDouble;
+
+  // construtor
+  public MinhaClasse(int i, double d) {
+    this.meuInteiro = i;
+    this.meuDouble = d;
+  }
+
+  // métodos
+  public void duplicaInteiro() {
+    this.meuInteiro *= 2;
+  }
+}
+
+// Instanciação de objeto
+MinhaClasse mc = new MinhaClasse(17, 3.14159);
+#+END_SRC
+* Métodos que devolvem objetos
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+Suponha que:
+#+BEGIN_SRC java
+public class Número extends Object { ... }
+public class NúmeroImaginário extends Número { ... }
+#+END_SRC
+Pergunta. O método:
+#+BEGIN_SRC java
+public Número devolveUmNúmero() {
+   ...
+}
+#+END_SRC
+#+ATTR_BEAMER: :overlay <+->
+1. Pode devolver um objeto do tipo Object?
+2. Pode devolver um objeto do tipo NúmeroImaginário?
+* Modificadores de acesso
+#+ATTR_LATEX: :align l|c|c|c|c
+#+CAPTION: Níveis de acesso
+|---------------------------------+-----------------------------+----------------------------+-------------------------------+---------------------------|
+| @@beamer:\textbf{Modificador}@@ | @@beamer:\textbf{Classse}@@ | @@beamer:\textbf{Pacote}@@ | @@beamer:\textbf{Subclasse}@@ | @@beamer:\textbf{Mundo}@@ |
+|---------------------------------+-----------------------------+----------------------------+-------------------------------+---------------------------|
+|---------------------------------+-----------------------------+----------------------------+-------------------------------+---------------------------|
+| ~public~                        | Sim                         | Sim                        | Sim                           | Sim                       |
+|---------------------------------+-----------------------------+----------------------------+-------------------------------+---------------------------|
+| ~protected~                     | Sim                         | Sim                        | Sim                           | Não                       |
+|---------------------------------+-----------------------------+----------------------------+-------------------------------+---------------------------|
+| (sem modificador)               | Sim                         | Sim                        | Não                           | Não                       |
+|---------------------------------+-----------------------------+----------------------------+-------------------------------+---------------------------|
+| ~private~                       | Sim                         | Não                        | Não                           | Não                       |
+|---------------------------------+-----------------------------+----------------------------+-------------------------------+---------------------------|
+* Métodos e variáveis de classe
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java
+public class Bicicleta {
+    private int cadência;   private int marcha;
+    private int velocidade;
+    private int id;
+    private static int númeroDeBicicletas = 0;
+
+    public Bicicleta(int cadênciaInicial, int velocidadeInicial,
+                                        int marchaInicial){
+        marcha = marchaInicial;
+        cadência = cadênciaInicial;
+        velocidade = velocidadeInicial;
+
+        // incrementa o número de bicicletas
+        // e o atribui como identificador
+        id = ++númeroDeBicicletas;
+    }
+
+    public int getID() {
+        return id;
+    }
+
+    public static int getNúmeroDeBicicletas() {
+        return númeroDeBicicletas;
+    }
+}
+#+END_SRC
+* Atribuição de variáveis estáticas
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+
+#+BEGIN_SRC java
+class MinhaClasse {
+  // variáveis e métodos de classe
+  public static float PI = 3.14159;
+
+  public static int ID = geraID();
+  private static int geraID() { ... }
+
+  // variáveis e métodos de instância
+  protected int x = 10;
+
+  public int y = getY();
+  public int getY() { ... }
+}
+#+END_SRC
+* Anotações
+** Forma de metadados :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+Provê informação sobre um programa que não faz parte do programa em si; não tem efeito sobre o código que eles anotam.
+** :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+Usado pelo:
+- Compilador :: para detectar erros ou suprimir @@beamer:\textit{warnings}@@
+- Instalador :: programas de instalação podem usar a informação para gerar código, arquivos XML, etc.
+- Interpretador :: algumas anotações podem ser examinadas em tempo de execução
+* Anotações
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+#+BEGIN_SRC java
+@Test
+void doisMaisDoisSupostamenteSãoQuatro() { ... }
+
+@Autor(
+   nome = "Daniel Cordeiro",
+   data = "02/03/2016"
+)
+class MinhaClasse() { ... }
+
+@Autor(nome="Daniel Cordeiro")
+@Override
+void meuSuperMétodo() { ... }
+
+@interface Autor {
+   String nome() default "Desconhecido";
+   String data();
+#+END_SRC
+* Anotações no Java 8
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+Java SE 8[fn:: Ver também a JSR 308] permite anotar qualquer uso de um tipo:
+- em instanciação de objetos
+  #+BEGIN_SRC java
+  new @Interned MeuObjeto();
+  #+END_SRC
+- em conversão de tipos:
+  #+BEGIN_SRC java
+  minhaString = (@NonNull String) str;
+  #+END_SRC
+- cláusula ~implements~:
+  #+BEGIN_SRC java
+  class ListaImutável<T> implements
+      @Readonly List<@Readonly T> { ... }
+  #+END_SRC
+- em declarações de exceções
+  #+BEGIN_SRC java
+  void monitorDeTemperatura() throws
+      @Critical TemperaturaException { ... }
+  #+END_SRC
+* Interfaces
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+Definem um "contrato" que uma classe deve seguir.
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java
+public interface GrupoDeInterfaces
+       extends Interface1, Interface2, Interface3 {
+
+    // declarações de constantes
+
+    // base de logaritmos neperianos
+    double E = 2.718282;
+
+    // assinatura de métodos
+    void façaAlgo(int i, double x);
+
+    static public métodoEstático(int i) {
+       return Math.sqrt(GrupoDeInterfaces.E);
+    }
+
+    // método padrão
+    default int duplica(String s) {
+        return s+s;
+    }
+}
+#+END_SRC
+* Herança
+- Classes definem a estrutura e comportamento de objetos
+- @@beamer:\alert{Herança}@@ é a característica de linguagens OO que permite que novas classes sejam criadas usando classes pré-existentes como base
+- A nova classe /herda/ os campos e métodos da classe original
+- Dizemos que a nova classe é uma /subclasse/ da original; e a classe utilizada como base é chamada de /superclasse/.
+** Vantagens: :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+- Melhor modelagem conceitual --- hierarquias de especialização são comuns na vida real
+- Fatorização --- herança permite que propriedades comuns sejam fatorizadas, i.e., definidas apenas uma vez
+- Refinamento do projeto e validação --- construção de classes com base em outras bem testadas produzirá menos defeitos
+- Polimorfismo @@beamer:{\tiny (mais sobre isso daqui a pouco)}@@
+* Exemplo de herança
+:PROPERTIES:
+:BEAMER_OPT: fragile
+:END:
+** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.4
+:END:
+#+BEAMER:\tiny
+#+BEGIN_SRC java
+public class Bicycle {
+
+  // a classe Bicycle tem três campos
+  public int cadence, gear, speed;
+
+  // the Bicycle class has one constructor
+  public Bicycle(int startCadence,
+                 int startSpeed,
+                 int startGear) {
+      gear = startGear;
+      cadence = startCadence;
+      speed = startSpeed;
+  }
+
+  // a classe Bicycle tem quatro métodos
+  public void setCadence(int newValue) {
+      cadence = newValue;
+  }
+  public void setGear(int newValue) {
+      gear = newValue;
+  }
+  public void applyBrake(int decrement) {
+      speed -= decrement;
+  }
+  public void speedUp(int increment) {
+      speed += increment;
+  }
+
+}
+#+END_SRC
+** :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.6
+:END:
+#+BEAMER:\scriptsize
+#+BEGIN_SRC java
+public class MountainBike extends Bicycle {
+
+  // a subclasse MountainBike adiciona um campo
+  public int seatHeight;
+
+  // a subclasse MountainBike tem um construtor
+  public MountainBike(int startHeight,
+                      int startCadence,
+                      int startSpeed,
+                      int startGear) {
+      super(startCadence, startSpeed, startGear);
+      seatHeight = startHeight;
+  }
+
+  // a subclasse MountainBike adiciona um método
+  public void setHeight(int newValue) {
+      seatHeight = newValue;
+  }
+}
+#+END_SRC
+* Exemplo #2
+#+ATTR_LATEX: :width \textwidth
+[[./imagens/heranca-relogios.pdf]]
+* Hierarquia de classes
+#+ATTR_LATEX: :width \textwidth
+[[./imagens/hierarquia-de-classes.png]]
+
+* Extra - Exemplo de código longo no Beamer
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks=0.8, label=
+:END:
+#+BEAMER:\begin{mycode}
+#+BEGIN_SRC java
+class Lista <T> {
+	T [] dados;
+	int livre;
+
+	@SuppressWarnings("unchecked")
+	public Lista(int max){
+
+		dados = (T []) new Object[max];
+		livre = 0;
+	}
+
+	public void add(T x){
+
+		if(livre < dados.length){
+
+			dados[livre] = x;
+			livre++;
+		}
+		else throw new IllegalStateException("Lista cheia!");
+	}
+
+	public int tamanho(){
+
+		return livre;
+	}
+
+	public T get(int i){
+
+		if(i < tamanho()){
+
+			return dados[i];
+		}
+		else throw new IllegalArgumentException("Indice invalido!");
+	}
+
+	public T set(int i, T x){
+
+		if(i < tamanho()){
+
+			T old = dados[i];
+			dados[i] = x;
+			return old;
+		}
+		else throw new IllegalArgumentException("Indice invalido!");
+	}
+}
+#+END_SRC
+#+BEAMER:\end{mycode}
+
+* Bibliografia
+- The Java™ Tutorials @@beamer:\\@@ https://docs.oracle.com/javase/tutorial/java/concepts/index.html

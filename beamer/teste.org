@@ -1,0 +1,104 @@
+# Template básico
+#+AUTHOR: Kauê Patrick de Oliveira
+#+TITLE: Escrevendo apresentações Beamer em org-mode
+
+#+latex_class: beamer
+
+#+OPTIONS:   H:2 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-tocc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:https://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+
+# Especifica o formato para a interface especial que o org fornece para controlar o layout de slides individuais
+#+columns: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
+
+# Habilita os comandos Beamer específicos para org-mode
+#+startup: beamer
+
+# Informa ao exportador de LaTeX para utilizar a classe beamer
+#+LaTeX_CLASS: beamer
+
+# Informa ao exportador de LaTeX para as configurações largas de fonte
+# #+LaTeX_CLASS_OPTIONS: [bigger]
+
+# Especifica como as headlines org são traduzidas para a estrutura Beamer
+# No caso de H:2, as headlines de nível 1 são convertidas em seções e as headlines de nível 2, em frames
+# #+OPTIONS: H:2
+
+#+latex_header: \mode<beamer>{\usetheme{Madrid}}
+
+# Insere uma tabela de conteúdos no início de cada seção, com a seção atual destacada
+# #+latex_header: \AtBeginSection[]{\begin{frame}<beamer>\frametitle{Topic}\tableofcontents[currentsection]\end{frame}}
+
+* Introdução
+** Um slide simples
+Este slide consiste de um texto simples e uma lista de alguns tópicos
+- O primeiro, e muito @importante@, tópico!
+  # A marcação não funcionou
+- O tópico anterior utiliza a marcação especial (@) que traduz para o comando Beamer /alert\slash para destacar texto
+A lista acima poderia ser numerada ou qualquer outro tipo de lista, além de poder incluir sublistas.
+
+** Um slide mais complexo
+Este slide ilustra o uso de blocos Beamer. O seguinte texto, com sua própria headline, é exibido em um bloco.
+*** Org mode aumenta a produtividade :B_theorem:
+:PROPERTIES:
+:BEAMER_env: theorem
+:END:
+- Com o org mode, não é necessário lembrar comandos LaTeX.
+- Org é baseado em texto ascii, que é inerentemente portátil.
+
+- Emacs!
+
+# Código LaTeX que cria um símbolo de "fim de prova" ajustado à direita
+\hfill \(\qed\)
+
+
+** Duas colunas
+# Por que não é necessário inserir o ignoreheading aqui?
+*** Um bloco :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.4
+:END:
+- Este slide consiste de duas colunas
+- A primeira coluna (à esquerda) não tem heading e consiste apenas de texto
+- A segunda coluna (à direita) tem uma imagem e está anexada em um bloco @example@
+
+*** Uma imagem :B_example:BMCOL:
+:PROPERTIES:
+:BEAMER_env: example
+:BEAMER_col: 0.6
+:END:
+
+# Adiciona um atributo à imagem que informa o LaTeX para escalar a imagem para a largura total da coluna (\textwidth)
+#+ATTR_LaTeX: :width \textwidth
+
+[[file:imagens/slide-exemplo.png]]
+
+** Babel
+:PROPERTIES:
+:BEAMER_envargs: [t]
+:END:
+*** Código em C :B_column:B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.45
+:END:
+#+name: cexample
+#+begin_src C :results output :exports both
+#include <stdio.h>
+int a = 1;
+int b = 2;
+int c = a+b+1;
+printf("A saída é %d.", c);
+#+end_src
+
+*** A saída :B_colum:B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.4
+:BEAMER_envargs: <2->
+:END:
+#+RESULTS: cexample
+: A saída é 3.

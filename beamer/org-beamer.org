@@ -1,0 +1,108 @@
+#+title: Exemplo da exportação Org-Beamer
+#+author: Kauê Patrick de Oliveira
+#+date:
+
+# Ativa o modo minoritário de edição de documentos Beamer
+#+STARTUP: beamer
+
+# Exporta os cabeçalhos de primeiro nível como frames e remove o indíce
+#+OPTIONS: H:1 toc:nil
+
+# Exporta para o Beamer com o tema metropolis, com a opção de título em caixa alta com fonte menor
+#+BEAMER_THEME: metropolis [titleformat=allsmallcaps]
+
+* Introdução - Slide simples
+Este slide consiste de um texto simples e uma lista de alguns tópicos
+- O primeiro, e muito *importante*, tópico!
+- O tópico anterior utiliza a marcação especial (*) que traduz para o comando Beamer =alert= para destacar texto
+A lista acima poderia ser numerada ou qualquer outro tipo de lista, além de poder incluir sublistas.
+
+* Um slide mais complexo
+Este slide ilustra o uso de blocos Beamer. O seguinte texto, com sua própria headline, é exibido em um bloco.
+** Org mode aumenta a produtividade :B_theorem:
+:PROPERTIES:
+:BEAMER_env: theorem
+:END:
+- Com o org mode, não é necessário lembrar comandos LaTeX.
+- Org é baseado em texto ascii, que é inerentemente portátil.
+
+- Emacs!
+
+# Código LaTeX que cria um símbolo de "fim de prova" ajustado à direita
+\hfill \(\qed\)
+
+
+* Como usar colunas nos slides
+*** Bloco A :B_column:
+:PROPERTIES:
+:BEAMER_col: 0.5
+:BEAMER_env: column
+:END:
+Para criar colunas em um frame, é necessário adicionar a propriedade =BEAMER_col=
+*** Bloco B :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.5
+:END:
+O valor da propriedade deve ser um número decimal correspondente a uma fração da largura total do texto
+
+* Slide com duas colunas
+** Um bloco :B_column:
+:PROPERTIES:
+:BEAMER_env: column
+:BEAMER_col: 0.4
+:END:
+- Este slide consiste de duas colunas
+- A primeira coluna (à esquerda) não tem cabeçalho e consiste apenas de texto
+- A segunda coluna (à direita) tem uma imagem e está anexada em um bloco =example=
+
+** Uma imagem :B_example:BMCOL:
+:PROPERTIES:
+:BEAMER_env: example
+:BEAMER_col: 0.6
+:END:
+
+# Adiciona um atributo à imagem que informa o LaTeX para escalar a imagem para a largura total da coluna (\textwidth)
+#+ATTR_LaTeX: :width \textwidth
+
+[[file:imagens/slide-exemplo.png]]
+
+* Slide com código-fonte
+:PROPERTIES:
+:BEAMER_envargs: [t]
+:END:
+*** Código em C :B_column:B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.45
+:END:
+#+name: cexample
+#+begin_src C :results output :exports both
+#include <stdio.h>
+int a = 1;
+int b = 2;
+int c = a+b+1;
+printf("A saída é %d.", c);
+#+end_src
+
+*** A saída :B_colum:B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.35
+:BEAMER_envargs: <2->
+:END:
+#+RESULTS: cexample
+: A saída é 4.
+
+* Sintaxe específica do Beamer
+É possível utilizar comandos do Beamer e sua sintaxe específica dentro de arquivos org.
+
+@@beamer:\pause@@
+
+Isso pode ser feito com:
+- =#+BEAMER:<comando>=
+- =#+BEGIN_EXPORT beamer= @@beamer:\\@@ =<comando>= @@beamer:\\@@ =#+END_EXPORT=
+- =@@beamer:<comando>@@=
+@@beamer:\pause@@
+
+Por exemplo, neste slide, estão sendo usados os comandos =\pause= e =\\= do Beamer.

@@ -1,0 +1,168 @@
+#+title: Org Mode para GNU Emacs
+#+setupfile: setup.org
+#+html_head: <link rel="stylesheet" href="../resources/style/index.min.css" type="text/css" />
+#+html_head: <link rel="preload" href="../resources/img/org-mode-unicorn.svg" as="image" type="image/svg+xml">
+#+include: "resources/preamble.html" export html
+
+#+html_head: <link rel="stylesheet" href="resources/style/org-demo.min.css" type="text/css" />
+#+include: "resources/normal-outline-3.html" export html
+
+#+begin_export html
+<div class="banner hero" itemscope itemtype="https://schema.org/SoftwareApplication">
+  <img src="resources/img/org-mode-unicorn.svg"
+       alt="Org unicorn logo" itemprop="image"/>
+  <div>
+    <h2>
+      <span itemprop="name">Org Mode</span>
+      <p class="subtitle">Sua vida em texto simples</p>
+    </h2>
+    <p>
+      Um modo principal do <a href="https://www.gnu.org/software/emacs/" style="color: inherit; font-weight: bold; font-style: italic;"
+           title="An extensible, customizable, free/libre text editor">GNU Emacs</a> para <span itemprop="applicationCategory">fazer anotações, criar documentos, notebooks computacionais, fazer programação literária, listas to-do, planejar projetos e mais — em um sistema rápido e eficaz de texto simples.</p>
+      <p><a title="Instalar pelo GNU ELPA" href="https://elpa.gnu.org/packages/org.html"><img src="https://elpa.gnu.org/packages/org.svg" alt="Instalar pelo GNU ELPA" /></a>
+        <a title="Como reportar um bug" href="/manual/Feedback.html"><img src="resources/img/badge-report-bug.svg" alt="Como reportar um bug" /></a>
+        <a title="Enviar e-mail para a mailing list do Org-mode" href="mailto:emacs-orgmode@gnu.org"><img src="resources/img/badge-feedback.svg" alt="Como reportar um bug" /></a>
+        <a title="URL do repositório para git clone" href="https://git.savannah.gnu.org/cgit/emacs/org-mode.git"><img src="resources/img/badge-source-code.svg" alt="URL do repositório para git clone" /></a>
+        <a title="Página do projeto em sr.ht" href="https://sr.ht/~bzg/org"><img src="resources/img/badge-srht-project.svg" alt="Página do projeto em sr.ht"/></a></p>
+    <p class="bubble">
+    Apoie via <a href="https://liberapay.com/org-mode" title="Doação sempre ajuda"
+         style="font-weight: bold; display: inline-block">
+        <img class="inline" src="resources/img/external/librepay.svg" alt="Liberapay logo"/>
+        Liberapay</a></p>
+    <meta itemprop="operatingSystem" content="Linux, MacOS, Windows">
+    <meta itemprop="softwareVersion" content="9.3.8">
+    <meta itemprop="datePublished" content="2020-08-07">
+    <meta itemprop="url" content="https://orgmode.org">
+  </div>
+</div>
+<div class="banner slim grey faded inline">
+  <p style="width:90vw; color:#515151">Criado por <a
+     target="new" href="https://staff.science.uva.nl/~dominik/"
+     style="font-weight:500; color:inherit">Carsten Dominik</a> em <a
+     target="new" href="../manual/History-and-Acknowledgments.html" style="color:#6e6e6e"
+     >2003</a>, mantido por <a target="new" href="https://bzg.fr/en/" style="font-weight:500; color:inherit"
+     >Bastien Guerry</a> e desenvolvido por <a href="../org.html#History-and-Acknowledgments" style="color:#6e6e6e">várias outras pessoas</a>.</p>
+</div>
+#+end_export
+
+* Destaques
+  :PROPERTIES:
+  :HTML_CONTAINER_CLASS: columns no-heading
+  :END:
+
+** Recursos
+@@html:<a href="../features.html">@@
+#+attr_html: :alt Três estrelas :title Mergulhe nas possibilidades
+[[file:resources/img/stars.svg]]
+
+@@html:</a>@@
+
+** Instalação
+@@html:<a href="../org.html#Installation">@@
+#+attr_html: :alt Seta voltada para baixo :title O que você está esperando?
+
+[[file:resources/img/install.svg]]
+@@html:</a>@@
+
+** Início Rápido
+@@html:<a href="../quickstart.html">@@
+#+attr_html: :alt Foguete voando :title Comece a usar Org. Você nunca vai parar.
+
+[[file:resources/img/quickstart.svg]]
+@@html:</a>@@
+
+** Contribuir
+@@html:<a href="../worg/org-contribute.html">@@
+#+attr_html: :alt Símbolo do Git branch :title Sim. Faça isto.
+
+[[file:resources/img/contribute.svg]]
+@@html:</a>@@
+
+* Elaboration + demo image :ignore:
+
+#+attr_html: :style margin-top:2rem;
+
+Org é um formato de arquivo de texto simples estruturado muito flexível, formado por algumas estruturas simples, mas versáteis — construído para ser ao mesmo tempo [[https://karl-voit.at/2017/09/23/orgmode-as-markup-only/][simples o bastante para iniciantes]] e [[http://howardism.org/Technical/Emacs/literate-devops.html][poderoso o suficiente para especialistas]].
+
+O exemplo abaixo permite visualizar alguns dos recursos poderosos que Org oferece. Clique nos cabeçalhos e links para descobrir como Org recolhe e expande o conteúdo correspondente de forma inteligente.
+
+#+include: org-demo.html export html
+
+* Leitura adicional
+  :PROPERTIES:
+  :CUSTOM_ID: reading
+  :END:
+
+Além do [[file:../quickstart.org][início rápido]] e do [[file:../manual/][manual]], Org também tem um [[file:../guide/][guia]] e uma extensa documentação escrita pela comunidade no [[file:../worg/][Worg]].
+
+Quase todo usuário de ORG tem uma história sobre como Org o ajuda — alguns acharam tão útil que escreveram [[file:../worg/org-papers.html][artigos científicos]] sobre o valor do Org para a realização de [[https://en.wikipedia.org/wiki/Reproducibility#Reproducible_research][pesquisas reproduzíveis]]. Alguns produziram ferramentas de terceiros para usar Org fora do Emacs, como em aplicações mobile.
+
+* Mais Org
+  :PROPERTIES:
+  :CUSTOM_ID: more
+  :END:
+O [[../worg/org-media-type.html][tipo MIME dos arquivos Org]] é =text/org=. Os arquivos Org usam a extensão ~.org~. A maior parte dos sistemas operacionais não como abrir arquivos ~.org~ no Emacs, mas é possível fazer essa configuração facilmente.
+
+Apesar de a implementação de referência do Org em Emacs lisp ser a mais rica em recursos, existem várias [[file:../tools.org][ferramentas]] adicionais que utilizam Org.
+
+#+begin_center
+#+attr_html: :class btn
+[[file:../tools.org][Ferramentas que utilizam Org]]
+#+end_center
+
+* [[file:../worg/][Worg]], um /Mundo/ de Org
+  :PROPERTIES:
+  :CUSTOM_ID: worg
+  :END:
+
+Org tem tantos usos que não é possível documentar todos facilmente, muito menos exibir todos em uma única página web. Portanto, [[file:../worg][Worg]] funciona como uma wiki da comunidade na qual é possível documentar e compartilhar informações sobre todos os aspectos de usar e trabalhar com Org.
+
+Por exemplo, Worg inclui:
+- [[file:../worg/org-faq.html][A FAQ]] (/Frequently Asked Questions/ - Perguntas frequentes)
+- [[file:../worg/org-hacks.html][Hacks de Org]]
+- [[file:../worg/org-tutorials/index.html][Uma lista de tutoriais]]
+- [[file:../worg/doc.html][Documentação de todos as funções, comandos e opções]]
+- /[[file:../worg/org-in-the-wild.html][Org in the wild]]/
+- /...e muito mais/
+
+Worg é mantido como um repositório Git de arquivos Org que são publicados como um website em HTML. [[file:../worg/worg-about.html#contribute-to-worg][Novos contribuidores são bem-vindos]].
+
+#+BEGIN_SRC shell
+~$ git clone https://git.sr.ht/~bzg/worg
+#+END_SRC
+
+* Inscrevendo-se na lista de discussão (/mailing list/)
+  :PROPERTIES:
+  :CUSTOM_ID: mailing-list
+  :END:
+
+A lista de e-mails do Org é o principal local para se conectar com a comunidade do Org. Você pode se [[https://lists.gnu.org/mailman/listinfo/emacs-orgmode][inscrever na lista]] e explorar o arquivo na lista em [[https://list.orgmode.org/][list.orgmode.org]] ou [[https://lists.gnu.org/archive/html/emacs-orgmode/][nesta página do mailmain]].
+
+Mesmo sem estar inscrito na lista, você pode enviar um email para [[mailto:emacs-orgmode@gnu.org][emacs-orgmode@gnu.org]] e nós iremos te adicionar à lista de permissões de pessoas que podem acessar a lista.
+
+Você pode ler [[file:../worg/org-mailing-list.html][mais sobre a lista de e-mails]] e é possível encontrar mais informações sobre [[file:../worg/org-web-social.html][Org em outras redes sociais]].
+
+Através do IRC, você também pode se conectar a outros entusiastas de Org no canal ~#org-mode~ do [[https://libera.chat/][Libera.Chat]].
+
+A [[file:../worg/contributors.html][lista completa de colaboradores]] do Org mode está disponível no /Worg/. Você também pode conferir os [[file:../org.html#History-and-Acknowledgments][agradecimentos]] do manual.
+
+* Doom, Spacemacs, Scimax e configurações populares
+  :PROPERTIES:
+  :CUSTOM_ID: configs
+  :END:
+
+Os kits iniciais para Emacs [[https://github.com/hlissner/doom-emacs][Doom]], [[https://www.spacemacs.org/][Spacemacs]] e [[https://github.com/jkitchin/scimax][Scimax]] incluem um conjunto selecionado de pacotes e configurações com o objetivo de melhorar o Org Mode (e o Emacs de forma geral) para certos casos de uso. Eles incluem Org em conjunto com integrações entre =org-mode= e outros modos (como o =evil-mode=). Aqui estão os links para os pacotes atualmente incluídos no [[https://github.com/doomemacs/doomemacs/blob/master/modules/lang/org/packages.el][Doom]] e no [[https://github.com/syl20bnr/spacemacs/blob/master/layers/%2Bemacs/org/packages.el][Spacemacs]]. Como o /Scimax/ é profundamente integrado com o Org, o [[https://github.com/jkitchin/scimax/blob/master/scimax.org#org-mode][manual]] é um bom local para começar. /Doom/ instala uma versão de Org próxima à versão de desenvolvimento ~HEAD~, enquanto /Spacemacs/ e /Scimax/ utilizam a versão do Org lançada no GNU ELPA.
+
+Kits iniciais frequentemente alteram de maneira significativa a experiência de usuário no Emacs. Se você procura por algo mais próximo do Emacs padrão, existem configurações populares que incluem customização do org-mode e pacotes relacionados ao Org, como o [[https://github.com/purcell/emacs.d/blob/master/lisp/init-org.el][emacs.d de Purcell]].
+
+* Outros Editores de Texto
+  :PROPERTIES:
+  :CUSTOM_ID: editors
+  :END:
+
+Apesar de atualmente o conjunto completo de [[file:../features.org][recursos]] do Org ser exclusivo do Emacs, a funcionalidade básica dos arquivos Org foi implementada em uma série de editores e aplicativos móveis. A seguir, há uma lista de extensões e aplicativos que suportam arquivos Org.
+- *Vim* :  [[https://github.com/kristijanhusak/orgmode.nvim][orgmode.nvim]], [[https://github.com/jceb/vim-orgmode][vim-orgmode]], [[https://github.com/axvr/org.vim][org.vim]]
+- *VS Codium* : [[https://github.com/vscode-org-mode/vscode-org-mode][vscode-org-mode]]
+- *Android* : [[https://www.orgzly.com/][Orgzly]], [[https://orgro.org/][Orgro]], [[https://github.com/Artawower/orgnote][Org Note]]
+- *iOS* : [[https://mobileorg.github.io/features/][MobileOrg]], [[https://orgro.org/][Orgro]]
+- *Web* : [[https://organice.200ok.ch/][Organice]], [[https://github.com/Artawower/orgnote][Org Note]]
